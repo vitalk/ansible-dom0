@@ -1,0 +1,22 @@
+---
+# Prepare xen server
+
+- name: Create xen tools config
+  copy: >
+    src=xen-tools.conf
+    dest=/etc/xen-tools/xen-tools.conf
+    owner=root
+    group=root
+  tags: config
+
+- name: Ensure the debootstrap script for Ubuntu Precise is exists
+  file: >
+    src=/usr/share/debootstrap/scripts/karmic
+    dest=/usr/share/debootstrap/scripts/precise
+    state=link
+
+- name: Add Ubuntu Precise distribution
+  file: >
+    src=/usr/lib/xen-tools/karmic.d
+    dest=/usr/lib/xen-tools/precise.d
+    state=link

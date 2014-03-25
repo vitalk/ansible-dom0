@@ -1,0 +1,4 @@
+---
+- hosts: mybox
+  roles:
+    - xen
