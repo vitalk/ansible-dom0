@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Vital Kudzelka
+  description: Ansible recipe to prepare debian-based Xen host to create Ubuntu guests.
+  license: MIT
+  min_ansible_version: 1.2
+  platforms:
+  - name: Debian
+    versions:
+    - all
+  - name: Ubuntu
+    versions:
+    - all
+  categories:
+  - xen
+  - cloud
+  - system
+dependencies: []
