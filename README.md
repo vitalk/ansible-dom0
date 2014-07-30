@@ -1,19 +1,42 @@
-What is it?
------------
+dom0
+====
 
 Ansible recipe to prepare debian-based Xen host to create Ubuntu guests.
 
+The Ubuntu Precise distribution does not included into Debian Squeeze
+so fix it:
 
-## Walkthrough
+* Creates a missed distribution
+* Creates a missed debootstrap script
 
-The Ubuntu Precise distribution does not included into Debian Squeeze so fix it.
+Role Variables
+--------------
 
-* Create a distribution
-* Create a debootstrap script
+At that moment role does not support any configuration.
 
-
-## How to run
+Example Playbook
+----------------
 
 ```bash
 ansible-playbook recipe.yml -i hosts.example -S --ask-su-pass
 ```
+
+```yaml
+# file: recipe.yml
+---
+- hosts: mybox
+  roles:
+    - .
+```
+
+License
+-------
+
+Licensed under the [MIT license](http://mit-license.org/vitalk).
+
+Author Information
+------------------
+
+Created by Vital Kudzelka.
+
+Don't hesitate create [a GitHub Issue](https://github.com/vitalk/ansible-dom0/issues) if you have any suggestions or found a bug.
