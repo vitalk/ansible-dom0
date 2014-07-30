@@ -1,0 +1,5 @@
+# The directory uses to cache packages while bootstraping a new system.
+dom0_cachedir:
+
+# The list of guests vm to create (optional).
+dom0_vms: []

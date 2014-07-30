@@ -20,3 +20,35 @@
     src=/usr/lib/xen-tools/karmic.d
     dest=/usr/lib/xen-tools/precise.d
     state=link
+
+- name: Ensure the cache directory is exists
+  file: path={{ dom0_cachedir }} state=directory
+  when: dom0_cachedir is defined
+
+- name: Debootstrap a new Xen guest instance (this may take a while)
+  command: /usr/bin/xen-create-image
+          --pygrub
+          --install-method=debootstrap
+          --cachedir={{ dom0_cachedir }}
+          --genpass=0
+          --password={{ item.vm_password }}
+          --vcpus={{ item.vm_vcpus }}
+          --lvm={{ item.vm_lvm }}
+          --fs={{ item.vm_fs }}
+          --size={{ item.vm_size }}
+          --swap={{ item.vm_swap }}
+          --memory={{ item.vm_memory }}
+          --dist={{ item.vm_dist }}
+          --mirror={{ item.vm_mirror }}
+          --broadcast={{ item.vm_broadcast }}
+          --gateway={{ item.vm_gateway }}
+          --ip={{ item.vm_ip }}
+          --mac={{ item.vm_mac }}
+          --netmask={{ item.vm_netmask }}
+          --hostname={{ item.vm_hostname }}
+  with_items: dom0_vms
+
+- name: Boot the new instance after creating it
+  command: /usr/sbin/xm create {{ item.vm_hostname }}.cfg
+  with_items: dom0_vms
+  when: item.vm_boot and not item.vm_destroy
