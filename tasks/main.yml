@@ -25,6 +25,26 @@
   file: path={{ dom0_cachedir }} state=directory
   when: dom0_cachedir is defined
 
+- name: Stop any running guests before deletion
+  command: /usr/sbin/xm destroy {{ item.vm_hostname }}
+  with_items: dom0_vms
+  when: item.vm_destroy
+
+- name: Remove the logical volumes (part 1)
+  lvol: vg={{ item.vm_lvm }} lv={{ item.vm_hostname }}-disk state=absent force=yes
+  with_items: dom0_vms
+  when: item.vm_destroy
+
+- name: Remove the logical volumes (part 2)
+  lvol: vg={{ item.vm_lvm }} lv={{ item.vm_hostname }}-swap state=absent force=yes
+  with_items: dom0_vms
+  when: item.vm_destroy
+
+- name: Remove the xen guest configs
+  file: path=/etc/xen/{{ item.vm_hostname }}.cfg state=absent
+  with_items: dom0_vms
+  when: item.vm_destroy
+
 - name: Debootstrap a new Xen guest instance (this may take a while)
   command: /usr/bin/xen-create-image
           --pygrub
@@ -47,6 +67,7 @@
           --netmask={{ item.vm_netmask }}
           --hostname={{ item.vm_hostname }}
   with_items: dom0_vms
+  when: not item.vm_destroy
 
 - name: Boot the new instance after creating it
   command: /usr/sbin/xm create {{ item.vm_hostname }}.cfg
