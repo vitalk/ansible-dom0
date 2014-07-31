@@ -50,6 +50,31 @@ ansible-playbook recipe.yml -i hosts.example -S --ask-su-pass
     - .
 ```
 
+```yaml
+# file: group_vars/all
+---
+dom0_cachedir: /var/cache/xen
+dom0_vms:
+  - vm_name: myapp
+    vm_password: r00tpass
+    vm_vcpus: 1
+    vm_size: 10gb
+    vm_memory: 512mb
+    vm_swap: 512mb
+    vm_lvm: sandbox
+    vm_fs: ext4
+    vm_dist: precise
+    vm_hostname: myapp.at.mybox
+    vm_ip: 192.168.1.42
+    vm_gateway: 192.168.1.1
+    vm_broadcast: 192.168.1.255
+    vm_netmask: 255.255.255.0
+    vm_mac: "00:16:3e:a5:0c:cd"
+    vm_mirror: "http://archive.ubuntu.com/ubuntu/"
+    vm_boot: true
+    vm_destroy: false
+```
+
 License
 -------
 
