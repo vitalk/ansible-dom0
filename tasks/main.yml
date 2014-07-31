@@ -73,3 +73,11 @@
   command: /usr/sbin/xm create {{ item.vm_hostname }}.cfg
   with_items: dom0_vms
   when: item.vm_boot and not item.vm_destroy
+
+- name: Add the new instance to autostart
+  file:
+    src=/etc/xen/{{ item.vm_hostname }}.cfg
+    dest=/etc/xen/auto/{{ item.vm_hostname }}.cfg
+    state=link
+  with_items: dom0_vms
+  when: not item.vm_destroy and item.vm_autostart
