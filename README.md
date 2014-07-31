@@ -12,7 +12,28 @@ so fix it:
 Role Variables
 --------------
 
-At that moment role does not support any configuration.
+Option | Description
+---|---
+`dom0_cachedir` | The directory uses to cache packages while bootstraping a new system.
+`dom0_vms` | The list of guests vm to create (optional). Each list item may contains the following variables.
+`vm_name` | The name of the new instance.
+`vm_password` | The root password for the new instance.
+`vm_vcpus` | The number of vcpus that the new instance will have.
+`vm_size` | The size of the primary disk image.
+`vm_memory` | The amount of memory allocated to the new instance.
+`vm_swap` | The size of the swap partition.
+`vm_fs` | The filesystem type to use for the new istance.
+`vm_lvm` | The volume group to save images within.
+`vm_dist` | The distribution you wish to install.
+`vm_mirror` | The mirror to use when installing via debootstrap.
+`vm_hostname` | The hostname of the new guest system. Ideally this will be FQDN.
+`vm_ip` | The IP address of the machine.
+`vm_mac` | The MAC address to use for a given interface.
+`vm_gateway` | The network gateway for the new instance.
+`vm_broadcast` | The broadcast address for the new instance.
+`vm_netmask` | The netmask for the new instance.
+`vm_boot` | Boot the new instance after creating it.
+`vm_destroy` | Destroy the existing guest system by its `vm_hostname`, e.g. remove any system logical volumes and configs.
 
 Example Playbook
 ----------------
