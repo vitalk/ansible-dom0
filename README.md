@@ -32,6 +32,7 @@ Option | Description
 `vm_gateway` | The network gateway for the new instance.
 `vm_broadcast` | The broadcast address for the new instance.
 `vm_netmask` | The netmask for the new instance.
+`vm_autostart` | Add the new instance to autostart.
 `vm_boot` | Boot the new instance after creating it.
 `vm_destroy` | Destroy the existing guest system by its `vm_hostname`, e.g. remove any system logical volumes and configs.
 
@@ -71,6 +72,7 @@ dom0_vms:
     vm_netmask: 255.255.255.0
     vm_mac: "00:16:3e:a5:0c:cd"
     vm_mirror: "http://archive.ubuntu.com/ubuntu/"
+    vm_autostart: true
     vm_boot: true
     vm_destroy: false
 ```
