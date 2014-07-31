@@ -1,7 +1,7 @@
 dom0
 ====
 
-Ansible recipe to prepare debian-based Xen host to create Ubuntu guests.
+Ansible recipe to prepare debian-based Xen host to manage Ubuntu guests.
 
 The Ubuntu Precise distribution does not included into Debian Squeeze
 so fix it:
