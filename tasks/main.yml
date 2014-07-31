@@ -45,6 +45,11 @@
   with_items: dom0_vms
   when: item.vm_destroy
 
+- name: Remove the xen guest config from autostart directory
+  file: path=/etc/xen/auto/{{ item.vm_hostname }}.cfg state=absent
+  with_items: dom0_vms
+  when: item.vm_destroy
+
 - name: Debootstrap a new Xen guest instance (this may take a while)
   command: /usr/bin/xen-create-image
           --pygrub
