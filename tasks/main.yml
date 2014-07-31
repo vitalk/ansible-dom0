@@ -40,7 +40,7 @@
   with_items: dom0_vms
   when: item.vm_destroy
 
-- name: Remove the xen guest configs
+- name: Remove the xen guest config
   file: path=/etc/xen/{{ item.vm_hostname }}.cfg state=absent
   with_items: dom0_vms
   when: item.vm_destroy
