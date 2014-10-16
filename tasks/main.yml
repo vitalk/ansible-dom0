@@ -85,4 +85,4 @@
     dest=/etc/xen/auto/{{ item.vm_hostname }}.cfg
     state=link
   with_items: dom0_vms
-  when: not item.vm_destroy and item.vm_autostart
+  when: item.vm_autostart and not item.vm_destroy
