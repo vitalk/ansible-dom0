@@ -20,3 +20,69 @@
     src=/usr/lib/xen-tools/karmic.d
     dest=/usr/lib/xen-tools/precise.d
     state=link
+
+- name: Ensure the cache directory is exists
+  file: path={{ dom0_cachedir }} state=directory
+  when: dom0_cachedir is defined
+
+- name: Stop any running guests before deletion
+  command: /usr/sbin/xm destroy {{ item.vm_hostname }}
+  with_items: dom0_vms
+  when: item.vm_destroy
+
+- name: Remove the logical volumes (part 1)
+  lvol: vg={{ item.vm_lvm }} lv={{ item.vm_hostname }}-disk state=absent force=yes
+  with_items: dom0_vms
+  when: item.vm_destroy
+
+- name: Remove the logical volumes (part 2)
+  lvol: vg={{ item.vm_lvm }} lv={{ item.vm_hostname }}-swap state=absent force=yes
+  with_items: dom0_vms
+  when: item.vm_destroy
+
+- name: Remove the xen guest config
+  file: path=/etc/xen/{{ item.vm_hostname }}.cfg state=absent
+  with_items: dom0_vms
+  when: item.vm_destroy
+
+- name: Remove the xen guest config from autostart directory
+  file: path=/etc/xen/auto/{{ item.vm_hostname }}.cfg state=absent
+  with_items: dom0_vms
+  when: item.vm_destroy
+
+- name: Debootstrap a new Xen guest instance (this may take a while)
+  command: /usr/bin/xen-create-image
+          --pygrub
+          --install-method=debootstrap
+          --cachedir={{ dom0_cachedir }}
+          --genpass=0
+          --password={{ item.vm_password }}
+          --vcpus={{ item.vm_vcpus }}
+          --lvm={{ item.vm_lvm }}
+          --fs={{ item.vm_fs }}
+          --size={{ item.vm_size }}
+          --swap={{ item.vm_swap }}
+          --memory={{ item.vm_memory }}
+          --dist={{ item.vm_dist }}
+          --mirror={{ item.vm_mirror }}
+          --broadcast={{ item.vm_broadcast }}
+          --gateway={{ item.vm_gateway }}
+          --ip={{ item.vm_ip }}
+          --mac={{ item.vm_mac }}
+          --netmask={{ item.vm_netmask }}
+          --hostname={{ item.vm_hostname }}
+  with_items: dom0_vms
+  when: not item.vm_destroy
+
+- name: Boot the new instance after creating it
+  command: /usr/sbin/xm create {{ item.vm_hostname }}.cfg
+  with_items: dom0_vms
+  when: item.vm_boot and not item.vm_destroy
+
+- name: Add the new instance to autostart
+  file:
+    src=/etc/xen/{{ item.vm_hostname }}.cfg
+    dest=/etc/xen/auto/{{ item.vm_hostname }}.cfg
+    state=link
+  with_items: dom0_vms
+  when: item.vm_autostart and not item.vm_destroy
